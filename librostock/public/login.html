@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LibroStock - Acceso</title>
+  <link rel="stylesheet" href="/css/estilos.css">
+  <style>
+    .login { max-width: 320px; margin: 15vh auto; padding: 24px; border: 1px solid #ccc; border-radius: 8px; background: #fff; }
+    .login h1 { margin-top: 0; }
+    .login input, .login button { display: block; width: 100%; box-sizing: border-box; margin: 8px 0; padding: 8px; }
+    #err { color: #b00020; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <form class="login" id="f">
+    <h1>LibroStock</h1>
+    <input name="usuario" placeholder="Usuario" autocomplete="username" required autofocus>
+    <input name="password" type="password" placeholder="Contraseña" autocomplete="current-password" required>
+    <div id="err"></div>
+    <button type="submit">Entrar</button>
+  </form>
+  <script>
+    document.getElementById('f').addEventListener('submit', async e => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(e.target));
+      const r = await fetch('/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+      if (r.ok) location.href = '/';
+      else document.getElementById('err').textContent = (await r.json()).error;
+    });
+  </script>
+</body>
+</html>
